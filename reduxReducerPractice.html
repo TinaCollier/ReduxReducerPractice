@@ -1,0 +1,114 @@
+<script>
+    const initialWagonState = {
+  supplies: 100,
+  distance: 0,
+  days: 0, 
+  cash: 20
+}
+
+const reducer = ( state = initialState, action ) => {
+  switch ( action.type ) {
+    case 'gather': {
+      return {
+        ...state,
+        supplies: state.supplies + 15,
+        distance: state.distance,
+        days: state.days + 1,
+        cash: state.cash
+      };
+    }
+  case 'travel': {
+    if ( state.supplies < action.payload) {
+      return state
+    } else {
+      return {
+        ...state,
+        supplies: state.supplies - ( action.payload * 20 ),
+        distance: state.distance + ( action.payload * 10 ),
+        days: state.days + action.payload,
+        cash: state.cash
+      };
+    }
+  }
+  case 'tippedWagon': {
+    return {
+      ...state,
+      supplies: state.supplies - 30,
+      distance: state.distance,
+      days: state.days + 1,
+      cash: state.cash
+    };
+  }
+  case 'sell': {
+    if ( state.supplies < 20 ) {
+      return state;
+    } else {
+        return {
+          ...state,
+          supplies: state.supplies - 20,
+          distance: state.distance,
+          days: state.days,
+          cash: state.cash + 5
+        };
+    };
+  }
+  case 'buy': {
+    if ( state.cash < 15 ) {
+      return state;
+    } else {
+        return {
+          ...state,
+          supplies: state.supplies + 25,
+          distance: state.distance,
+          days: state.days,
+          cash: state.cash - 15
+        };
+    };
+  }
+  case 'theft': {
+    return {
+      ...state,
+      supplies: state.supplies,
+      distance: state.distance,
+      days: state.days,
+      cash: state.cash / 2
+    };
+  }
+    default: {
+      return state;
+    }
+  }
+}
+
+const travelAction = { type: 'travel', payload: 1 };
+const wagonDay1 = reducer( initialWagonState, travelAction );
+console.log( 'firstDayState', wagonDay1 );
+
+const gatherAction = { type: 'gather' };
+const wagonDay2 = reducer( wagonDay1, gatherAction );
+console.log( 'secondDayState', wagonDay2 );
+
+const tippedAction = { type: 'tippedWagon' };
+const wagonDay3 = reducer( wagonDay2, tippedAction );
+console.log( 'thirdDayState', wagonDay3)
+
+const travelAction2 = { type: 'travel', payload: 3 };
+const wagonDay456 = reducer( wagonDay3, travelAction2 );
+console.log( '456DayState', wagonDay456 );
+
+const gatherAction2 = { type: 'gather' };
+const wagonDay7 = reducer( wagonDay456, gatherAction2 );
+console.log( 'seventhDayState', wagonDay7 );
+
+const sellAction = { type: 'sell' };
+const wagonDay8 = reducer( wagonDay7, sellAction );
+console.log( 'eighthDayState', wagonDay8 );
+
+const buyAction = { type: 'buy' };
+const wagonDay9 = reducer( wagonDay8, buyAction );
+console.log( 'ninthDayAction', wagonDay9 );
+
+const theftAction = { type: 'theft' };
+const wagonDay10 = reducer( wagonDay9, theftAction );
+console.log( 'tenthDayAction', wagonDay10 );
+</script>
